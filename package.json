@@ -18,7 +18,9 @@
   "homepage": "https://github.com/rvege1409/class101#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "date-utils": "^1.2.21",
     "express": "^4.17.0",
+    "moment": "^2.24.0",
     "mysql": "^2.17.1",
     "nodemon": "^1.19.0"
   }

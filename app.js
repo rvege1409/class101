@@ -2,11 +2,14 @@ var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
 var usedb = require('./lib/usedb');
+require('date-utils');
+
+
 
 //app.use
 app.use(express.static('public')); //static 디렉토리 지정
-app.use(bodyParser.json()); //json 형태로 오는것도 처리하겠다.
-app.use(bodyParser.urlencoded({extended:true}));//한글, 특수기호 -> 다른 문자열로 치환해서 보냄 그걸처리하겠다.
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
 //app.set
 app.set('view_engine', 'ejs'); // 뷰 엔진 설정
@@ -20,14 +23,56 @@ app.get('/',function(req,res){
 });
 
 //get
-app.get('/user_register/:id', function(req, res){
+app.get('/user_register/:id', async function(req, res){ // user 등록
     var id = req.params.id;
-    console.log(id);
-    var r = usedb.user_register(id);
-    res.send(r);
+    //console.log(id);
+    var result = await usedb.user_register(id);
+    res.send(result);
 });
+
+app.get('/user_check/:id', async function(req,res){ // user 확인
+    var id = req.params.id;
+    var result = await usedb.user_check(id);
+    res.send(result);
+});
+
+
 
 
 
 //post
 
+app.post('/select_post', async function(req,res){
+    var id = req.body.id;
+    var result = await usedb.select_post(id);
+    res.send(result);
+});
+
+app.post('/upload_post', async function(req,res){
+    var writer = req.body.writer;
+    var title = req.body.title;
+    var contents = req.body.contents;
+    var newDate = new Date();
+    var date = newDate.toFormat('YYYY-MM-DD HH24:MI;SS');
+
+    var result = await usedb.upload_post(writer, title, contents, date);
+    res.send(result);
+});
+
+app.post('/delete_post', async function(req,res){
+    var id = req.body.id;
+    var result = await usedb.delete_post(id);
+    res.send(result);
+});
+
+app.post('/update_post', async function(req,res){
+    var id = req.body.id;
+    var writer = req.body.writer;
+    var title = req.body.title;
+    var contents = req.body.contents;
+    console.log(id);
+    var newDate = new Date();
+    var date = newDate.toFormat('YYYY-MM-DD HH24:MI;SS');
+    var result = await usedb.update_post(writer, title, contents, date,id);
+    res.send(result);
+});
