@@ -22,7 +22,7 @@ router.post('/upload', async function(req,res){
 });
 
 router.post('/read', async function(req,res){
-    var id = req.body.postID;
+    var id = req.body.userID;
 
     var result = await usedb.read_comment(id);
     res.send(result);
